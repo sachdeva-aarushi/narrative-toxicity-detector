@@ -13,3 +13,13 @@ def plot_confusion_matrix(y_true, y_pred, save_path=None):
     if save_path:
         plt.savefig(save_path, bbox_inches="tight")
     plt.show()
+
+def plot_class_distribution(labels, save_path=None):
+    plt.figure(figsize=(6,5))
+    sns.countplot(x=labels)
+    plt.title("Balanced Dataset Class Distribution")
+    plt.xlabel("Label")
+    plt.ylabel("Count")
+    if save_path:
+        plt.savefig(save_path, bbox_inches="tight")
+    plt.show()
