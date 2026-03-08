@@ -14,5 +14,12 @@ def predict_text(text):
     model, vectorizer = load_artifacts()
     cleaned_text = clean_text(text)
     features = transform_text(vectorizer, [cleaned_text])
-    prediction = model.predict(features)[0]
-    return "toxic" if prediction == 1 else "neutral"
+    probabilities = model.predict_proba(features)[0]
+    toxicity_score = float(probabilities[1])
+    prediction = "toxic" if toxicity_score >= 0.3 else "neutral"
+    toxicity_percentage = round(toxicity_score * 100, 2)
+    return {
+        "prediction": prediction,
+        "toxicity_score": toxicity_score,
+        "toxicity_percentage": toxicity_percentage
+    }
