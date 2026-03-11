@@ -3,7 +3,12 @@ from src.utils.helpers import load_object
 from src.data.preprocessing import clean_text
 from src.features.feature_engineering import transform_text
 import yaml
+from src.utils.helpers import logger
+import time
+from datetime import datetime
+import json
 from pathlib import Path
+start_time = time.time()
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../"))
 MODEL_PATH = os.path.join(BASE_DIR, "models", "trained_model.pkl")
 VECTORIZER_PATH = os.path.join(BASE_DIR, "models", "vectorizer.pkl")
@@ -28,3 +33,12 @@ def predict_text(text):
         "toxicity_score": toxicity_score,
         "toxicity_percentage": toxicity_percentage
     }
+latency = (time.time() - start_time) * 1000
+log_data = {
+    "timestamp": datetime.utcnow().isoformat(),
+    "input_length": len(text),
+    "toxicity_score": toxicity_score,
+    "prediction": prediction,
+    "latency_ms": round(latency,2)
+}
+logger.info(json.dumps(log_data))
