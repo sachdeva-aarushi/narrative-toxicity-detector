@@ -22,6 +22,14 @@ _model = load_object(MODEL_PATH)
 _vectorizer = load_object(VECTORIZER_PATH)
 
 def predict_text(text):
+    if not isinstance(text, str):
+        raise ValueError("Input must be a string")
+
+    if text.strip() == "":
+        raise ValueError("Input text cannot be empty")
+
+    if len(text) > 10000:
+        raise ValueError("Input text exceeds maximum allowed length")
     cleaned_text = clean_text(text)
     features = transform_text(_vectorizer, [cleaned_text])
     probabilities = _model.predict_proba(features)[0]
